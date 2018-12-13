@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="120dip"
+    android:layout_margin="5dp"
+    android:layout_gravity="center"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    >
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:id="@+id/img_news_item_2"
+        android:layout_height="match_parent"
+        android:src="@mipmap/ic_launcher"
+        android:scaleType="center"
+        />
+    <TextView
+        android:id="@+id/tv_news_item_2_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:text="分析师观点｜中国股市需要华为精神"
+        android:layout_marginTop="16dp"
+        android:textStyle="bold"
+        android:layout_marginLeft="13dp"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/img_news_item_2"
+        android:layout_toEndOf="@+id/img_news_item_2"/>
+
+    <TextView
+        android:id="@+id/tv_item_2_news_sutitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="13sp"
+        android:text="最近股市又跌的稀里哗啦的，即使领导说春天不远了，市场也丝毫不领情，继续向下狂奔。"
+        android:layout_below="@+id/tv_news_item_2_title"
+
+        android:layout_alignLeft="@+id/tv_news_item_2_title"
+        android:layout_alignStart="@+id/tv_news_item_2_title"/>
+
+
+    <LinearLayout
+        android:id="@+id/layout_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="12dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginEnd="12dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="8dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
+
+
+        <ImageView
+            android:id="@+id/img_item_2_num_reduce"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:background="#e18383"/>
+
+        <TextView
+            android:id="@+id/tv_num"
+            android:layout_width="35dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="1"/>
+
+        <ImageView
+            android:id="@+id/img_item_2_num_add"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:background="#abcf70"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>
