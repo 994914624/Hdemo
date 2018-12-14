@@ -1,9 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     tools:context=".activity.DetailActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:padding="10dp"
+            android:id="@+id/tv_detail_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#262626"
+            android:textSize="18sp"
+            android:text="欧洲法院裁定英国可以单方面撤回脱欧请求"
+            android:textStyle="bold"
+            android:layout_marginLeft="2dp"
+            android:layout_alignParentTop="true"
+            />
+
+        <ImageView
+            android:padding="10dp"
+            android:id="@+id/img_detail_activity"
+            android:src="@mipmap/ic_launcher"
+            android:scaleType="centerCrop"
+            android:layout_width="match_parent"
+            android:layout_height="300dp" />
+
+        <TextView
+            android:id="@+id/tv_detail_source_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingRight="10dp"
+            android:gravity="right"
+            android:textColor="#a9a9a9"
+            android:paddingTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="16sp"
+            android:text="新华社"
+            />
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/ll_detail_activity_recyclerView"
+            android:layout_width="match_parent"
+            android:nestedScrollingEnabled="false"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            />
+
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

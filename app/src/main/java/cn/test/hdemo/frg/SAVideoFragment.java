@@ -1,7 +1,6 @@
 package cn.test.hdemo.frg;
 
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,15 +14,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.kongzue.baseokhttp.listener.ResponseListener;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,30 +26,22 @@ import java.util.List;
 
 import cn.test.hdemo.R;
 import cn.test.hdemo.activity.DetailActivity;
-import cn.test.hdemo.activity.DetailWebviewActivity;
-import cn.test.hdemo.adapter.AVAdapter;
 import cn.test.hdemo.adapter.SARecommendAdapter;
-import cn.test.hdemo.api.API;
-import cn.test.hdemo.entity.AVEntity;
 import cn.test.hdemo.entity.SARecommendEntity;
-import cn.test.hdemo.utils.HttpPOST;
 import cn.test.hdemo.utils.HttpUtil;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.annotations.SchedulerSupport;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SARecommendFragment extends BaseFragment {
+public class SAVideoFragment extends BaseFragment {
 
     protected static String TAG = "SARecommendFragment";
     private View view;
@@ -64,7 +51,8 @@ public class SARecommendFragment extends BaseFragment {
     private int count = 10;
     private Context context;
 
-    public SARecommendFragment() {
+
+    public SAVideoFragment() {
         // Required empty public constructor
     }
 
@@ -73,7 +61,7 @@ public class SARecommendFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_img, container, false);
+        view = inflater.inflate(R.layout.fragment_user, container, false);
         context = view.getContext().getApplicationContext();
         initView();
         initRefresh();
@@ -82,16 +70,15 @@ public class SARecommendFragment extends BaseFragment {
         return view;
     }
 
-
     private void initView() {
-        mRecyclerView = view.findViewById(R.id.sa_rec_recyclerView);
+        mRecyclerView = view.findViewById(R.id.sa_video_recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
     }
 
     private void initRefresh() {
 
-        RefreshLayout refreshLayout = (RefreshLayout) view.findViewById(R.id.sa_rec_refreshLayout);
+        RefreshLayout refreshLayout = (RefreshLayout) view.findViewById(R.id.sa_video_refreshLayout);
 
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -103,7 +90,6 @@ public class SARecommendFragment extends BaseFragment {
                 Log.d(TAG, "onRefresh:" + start);
                 //TODO 刷新数据
                 //getData(String.valueOf(start),String.valueOf(count));
-                //avAdapter.setNewData();
             }
 
 
@@ -132,15 +118,14 @@ public class SARecommendFragment extends BaseFragment {
         getData(String.valueOf(start), String.valueOf(count));
     }
 
-
     private void getData(final String start, final String count) {
-        // 默认前 10 条数据
+
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<String> e) throws Exception {
 
                 // 获取 json
-                e.onNext(HttpUtil.getH_Article(start, count));
+                e.onNext(HttpUtil.getH_Video(start, count));
 
             }
         }).subscribeOn(Schedulers.newThread())
@@ -155,12 +140,16 @@ public class SARecommendFragment extends BaseFragment {
                     public void onNext(@NonNull String response) {
                         Log.d(TAG, "onNext = " + response);
                         try {
+
                             Moshi moshi = new Moshi.Builder().build();
                             JsonAdapter<SARecommendEntity> jsonAdapter = moshi.adapter(SARecommendEntity.class);
-                            SARecommendEntity obj = jsonAdapter.fromJson(response);
+                            final SARecommendEntity obj = jsonAdapter.fromJson(response);
+                            // 更新数据
+                            //recommendAdapter.getData().clear();
                             recommendAdapter.addData(obj.getData());
                             recommendAdapter.notifyDataSetChanged();
-                        } catch (IOException e) {
+
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
 
@@ -176,7 +165,6 @@ public class SARecommendFragment extends BaseFragment {
 
                     }
                 });
-
     }
 
     private void initListener() {

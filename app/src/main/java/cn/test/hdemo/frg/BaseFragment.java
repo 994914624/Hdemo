@@ -54,8 +54,8 @@ public  class BaseFragment extends Fragment {
             case "SARecommendFragment":
                 fragment=new SARecommendFragment();
                 break;
-            case "UserFragment":
-                fragment=new UserFragment();
+            case "SAVideoFragment":
+                fragment=new SAVideoFragment();
                 break;
                 default:
                     fragment=new BaseFragment();

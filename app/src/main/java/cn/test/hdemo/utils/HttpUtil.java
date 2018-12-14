@@ -9,6 +9,9 @@ import com.kongzue.baseokhttp.util.Parameter;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 import cn.test.hdemo.api.API;
@@ -28,5 +31,74 @@ public class HttpUtil {
     public static void getTouTiaoNews(final Context context, String start, String count,ResponseListener responseListener){
         HttpRequest.DEBUGMODE = true;
         HttpRequest.GET(context, "https://www.baidu.com/", new Parameter(),responseListener);
+    }
+
+
+    public static String getH_Article( String start, String count){
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("scene_id","article_feed");
+            jsonObject.put("log_id","111");
+            jsonObject.put("distinct_id","test1");
+            jsonObject.put("limit",count);
+            jsonObject.put("exp_id","base");
+            return HttpPOST.submitPostData(API.H_ARTICLE,jsonObject);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+   // {"scene_id":"detail","log_id":"111","distinct_id":"test1","limit":"20","exp_id":"base","item_id":"6243991","item_type":"article"}
+    public static String getH_Article_detail( String start, String count,String itemId){
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("scene_id","detail");
+            jsonObject.put("log_id","111");
+            jsonObject.put("distinct_id","test1");
+            jsonObject.put("limit",count);
+            jsonObject.put("item_type","article");
+            jsonObject.put("item_id",itemId);
+            jsonObject.put("exp_id","base");
+            return HttpPOST.submitPostData(API.H_ARTICLE_DETAIL,jsonObject);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    //{"scene_id":"article_relevant","log_id":"111","distinct_id":"test1","limit":"1","exp_id":"base","item_id":"6236675","item_type":"article"}
+    public static String getH_Article_relevant( String start, String count,String itemId){
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("scene_id","article_relevant");
+            jsonObject.put("log_id","111");
+            jsonObject.put("distinct_id","test1");
+            jsonObject.put("limit",count);
+            jsonObject.put("item_type","article");
+            jsonObject.put("item_id",itemId);
+            jsonObject.put("exp_id","base");
+            return HttpPOST.submitPostData(API.H_ARTICLE_RELEVENT,jsonObject);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    //-------------------  video -------------------------
+    //{"scene_id":"video_feed","log_id":"111","distinct_id":"test1","limit":"3","exp_id":"base"}
+    public static String getH_Video( String start, String count){
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("scene_id","video_feed");
+            jsonObject.put("log_id","111");
+            jsonObject.put("distinct_id","test1");
+            jsonObject.put("limit",count);
+            jsonObject.put("exp_id","base");
+            return HttpPOST.submitPostData(API.H_VIDEO,jsonObject);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }

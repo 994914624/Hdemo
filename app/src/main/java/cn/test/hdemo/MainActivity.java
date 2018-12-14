@@ -11,7 +11,7 @@ import cn.test.hdemo.activity.BaseActivity;
 import cn.test.hdemo.frg.AVFragment;
 import cn.test.hdemo.frg.SARecommendFragment;
 import cn.test.hdemo.frg.NewsFragment;
-import cn.test.hdemo.frg.UserFragment;
+import cn.test.hdemo.frg.SAVideoFragment;
 
 
 /**
@@ -91,12 +91,12 @@ public class MainActivity extends BaseActivity {
 
         mViewPager.setOffscreenPageLimit(4);
         mViewPager.setAdapter(new MainFrgAdapter.Holder(getSupportFragmentManager())
+                .add(SARecommendFragment.newInstance("SARecommendFragment"))
+                .add(SAVideoFragment.newInstance("SAVideoFragment"))
                 .add(NewsFragment.newInstance("NewsFragment"))
                 .add(AVFragment.newInstance("AVFragment"))
-                .add(SARecommendFragment.newInstance("SARecommendFragment"))
-                .add(UserFragment.newInstance("UserFragment"))
                 .set());
-        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
