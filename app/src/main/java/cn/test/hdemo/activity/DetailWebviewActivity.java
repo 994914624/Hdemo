@@ -1,5 +1,6 @@
 package cn.test.hdemo.activity;
 
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import cn.test.hdemo.App;
 import cn.test.hdemo.R;
 
 public class DetailWebviewActivity extends BaseActivity {
@@ -30,13 +32,18 @@ public class DetailWebviewActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if(getIntent().getStringExtra("title")==null){
-            setTitle("详情");
-        } else {
-            setTitle(String.format("%s",getIntent().getStringExtra("title")));
+        try {
+            if(getIntent().getStringExtra("title")==null){
+                setTitle("详情");
+            } else {
+                setTitle(String.format("%s",getIntent().getStringExtra("title")));
+            }
+            H5_url = getIntent().getStringExtra("H5_url");
+            webView.loadUrl(H5_url);
+        } catch (Exception e){
+            e.printStackTrace();
         }
-        H5_url = getIntent().getStringExtra("H5_url");
-        webView.loadUrl(H5_url);
+
     }
 
     @Override
@@ -52,6 +59,24 @@ public class DetailWebviewActivity extends BaseActivity {
         final View view1 = LayoutInflater.from(this).inflate(R.layout.item_detial_webview_ad,null);
         final View view2 = LayoutInflater.from(this).inflate(R.layout.item_detial_webview_ad,null);
         final View view3 = LayoutInflater.from(this).inflate(R.layout.item_detial_webview_ad,null);
+        view1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(App.getApp(),"点击了神策推荐",Toast.LENGTH_SHORT).show();
+            }
+        });
+        view2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(App.getApp(),"点击了神策推荐",Toast.LENGTH_SHORT).show();
+            }
+        });
+        view3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(App.getApp(),"点击了神策推荐",Toast.LENGTH_SHORT).show();
+            }
+        });
         linearLayout.addView(view1);
         linearLayout.addView(view2);
         linearLayout.addView(view3);
@@ -99,9 +124,16 @@ public class DetailWebviewActivity extends BaseActivity {
             }
 
             @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+            }
+
+            @Override
             public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
+
                 linearLayout.setVisibility(View.VISIBLE);
+                super.onPageFinished(view, url);
+
             }
         });
     }

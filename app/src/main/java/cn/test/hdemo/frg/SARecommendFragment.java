@@ -160,7 +160,7 @@ public class SARecommendFragment extends BaseFragment {
                             SARecommendEntity obj = jsonAdapter.fromJson(response);
                             recommendAdapter.addData(obj.getData());
                             recommendAdapter.notifyDataSetChanged();
-                        } catch (IOException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
 
@@ -185,7 +185,7 @@ public class SARecommendFragment extends BaseFragment {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Log.d(TAG, "onItemClick: ");
-                Toast.makeText(context, "onItemClick" + position, Toast.LENGTH_SHORT).show();
+               // Toast.makeText(context, "onItemClick" + position, Toast.LENGTH_SHORT).show();
                 try {
                     SARecommendEntity.DataBean bean = (SARecommendEntity.DataBean) adapter.getItem(position);
                     Intent intent = new Intent(context, DetailActivity.class);
@@ -193,6 +193,7 @@ public class SARecommendFragment extends BaseFragment {
                     intent.putExtra("itemId", String.format("%s", bean.getItem_id()));
                     intent.putExtra("img", String.format("%s", bean.getImg()));
                     intent.putExtra("source", String.format("%s", bean.getSource()));
+                    intent.putExtra("type","article");
                     startActivity(intent);
                 } catch (Exception e) {
                     e.printStackTrace();

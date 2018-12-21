@@ -77,7 +77,7 @@ public class NewsFragment extends BaseFragment {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Log.d(TAG, "onItemClick: ");
-                Toast.makeText(context, "onItemClick" + position, Toast.LENGTH_SHORT).show();
+               // Toast.makeText(context, "onItemClick" + position, Toast.LENGTH_SHORT).show();
 
                 try {
                     TouTiaoNewsEntity.T1348647853363Bean bean = (TouTiaoNewsEntity.T1348647853363Bean) adapter.getItem(position);
@@ -102,12 +102,16 @@ public class NewsFragment extends BaseFragment {
     }
 
     private void initAdapter() {
+
+
+
         List<TouTiaoNewsEntity.T1348647853363Bean> data = new ArrayList<>();
         newsAdapter = new NewsAdapter(data);
         newsAdapter.openLoadAnimation();
         mRecyclerView.setAdapter(newsAdapter);
         // 获取默认数据
         getData(String.valueOf(start),String.valueOf(count));
+
     }
 
     private void initView() {
@@ -138,6 +142,7 @@ public class NewsFragment extends BaseFragment {
     }
 
     private void getData(final String start, final String count) {
+
         // 默认前 10 条数据
         HttpUtil.getTouTiaoNews(context, start, count,  new ResponseListener() {
             @Override

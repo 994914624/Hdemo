@@ -137,7 +137,7 @@ public class AVFragment extends BaseFragment {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Log.d(TAG, "onItemClick: ");
-                Toast.makeText(context, "onItemClick" + position, Toast.LENGTH_SHORT).show();
+               // Toast.makeText(context, "onItemClick" + position, Toast.LENGTH_SHORT).show();
                 try {
                     AVEntity.SubjectsBean bean = (AVEntity.SubjectsBean) adapter.getItem(position);
                     Intent intent = new Intent(context,DetailWebviewActivity.class);

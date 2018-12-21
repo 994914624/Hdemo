@@ -5,23 +5,36 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.test.hdemo.App;
 import cn.test.hdemo.R;
 import cn.test.hdemo.adapter.SARecommendAdapter;
 import cn.test.hdemo.entity.SARecommendEntity;
 import cn.test.hdemo.utils.HttpUtil;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class DetailActivity extends BaseActivity {
 
@@ -34,6 +47,7 @@ public class DetailActivity extends BaseActivity {
     private int start = 0;
     private int count = 3;
     private String itemId;
+    private String type;
 
 
     @Override
@@ -47,8 +61,8 @@ public class DetailActivity extends BaseActivity {
     private void initView() {
         imageView = findViewById(R.id.img_detail_activity);
         mRecyclerView = findViewById(R.id.ll_detail_activity_recyclerView);
-        textView =findViewById(R.id.tv_detail_activity);
-        tv_source=findViewById(R.id.tv_detail_source_activity);
+        textView = findViewById(R.id.tv_detail_activity);
+        tv_source = findViewById(R.id.tv_detail_source_activity);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         setBackClickListener(new View.OnClickListener() {
@@ -57,70 +71,108 @@ public class DetailActivity extends BaseActivity {
                 DetailActivity.this.finish();
             }
         });
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Intent intent = getIntent();
-        setTitle("详情");
-        String title = intent.getStringExtra("title");
-        textView.setText(title);
-        // img
-        String img = intent.getStringExtra("img");
-        Glide.with(this).load(img).into(imageView);
-        String source = intent.getStringExtra("source");
-        tv_source.setText(source);
-        itemId = intent.getStringExtra("itemId");
-
+        try {
+            Intent intent = getIntent();
+            setTitle("详情");
+            String title = intent.getStringExtra("title");
+            textView.setText(title);
+            // img
+            String img = intent.getStringExtra("img");
+            Glide.with(this).load(img).into(imageView);
+            String source = intent.getStringExtra("source");
+            tv_source.setText(source);
+            itemId = intent.getStringExtra("itemId");
+            type = intent.getStringExtra("type");
+            // 获取默认数据
+            getData(String.valueOf(start), String.valueOf(count), type);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
 
     }
 
     private void initAdapter() {
-
         List<SARecommendEntity.DataBean> data = new ArrayList<>();
         recommendAdapter = new SARecommendAdapter(data);
         recommendAdapter.openLoadAnimation();
         mRecyclerView.setAdapter(recommendAdapter);
-        // 获取默认数据
-        getData(String.valueOf(start), String.valueOf(count));
+        recommendAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+
+                Toast.makeText(App.getApp(),String.format("点击了神策推荐：%s",position),Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    private void getData(final String start, final String count) {
+    /**
+     * 数据
+     */
+    private void getData(final String start, final String count, final String type) {
         // 默认前 3 条数据
-
-        new Thread(new Runnable() {
+        Observable.create(new ObservableOnSubscribe<String>() {
             @Override
-            public void run() {
-                try {
-                    // 获取 article
-                    String response = HttpUtil.getH_Article_relevant(start, count, itemId);
-                    Moshi moshi = new Moshi.Builder().build();
-                    JsonAdapter<SARecommendEntity> jsonAdapter = moshi.adapter(SARecommendEntity.class);
+            public void subscribe(@NonNull ObservableEmitter<String> e) throws Exception {
+
+                // 获取 json
+
+                if ("article".equals(type)) {
+                    e.onNext(HttpUtil.getH_Article_relevant(start, count, itemId));
+                } else {
+                    e.onNext(HttpUtil.getH_Video_relevant(start, count, itemId));
+                }
 
 
-                    final SARecommendEntity obj = jsonAdapter.fromJson(response);
-                    final List<SARecommendEntity.DataBean> data= obj.getData();
-                    for(int i=0;i<data.size();i++){
-                        data.get(i).setType(2);
+            }
+        }).subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
                     }
-                    // 更新数据
-                    mRecyclerView.post(new Runnable() {
-                        @Override
-                        public void run() {
+
+                    @Override
+                    public void onNext(@NonNull String response) {
+                        Log.d(TAG, "onNext = " + response);
+                        try {
+                            Moshi moshi = new Moshi.Builder().build();
+                            JsonAdapter<SARecommendEntity> jsonAdapter = moshi.adapter(SARecommendEntity.class);
+
+
+                            final SARecommendEntity obj = jsonAdapter.fromJson(response);
+                            final List<SARecommendEntity.DataBean> data = obj.getData();
+                            for (int i = 0; i < data.size(); i++) {
+                                data.get(i).setType(2);
+                            }
+                            // 更新数据
                             recommendAdapter.getData().clear();
                             recommendAdapter.addData(data);
                             recommendAdapter.notifyDataSetChanged();
-                        }
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
 
-            }
-        }).start();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
 
     }
 }

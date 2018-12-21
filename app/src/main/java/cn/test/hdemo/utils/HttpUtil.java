@@ -6,6 +6,7 @@ import android.util.Log;
 import com.kongzue.baseokhttp.HttpRequest;
 import com.kongzue.baseokhttp.listener.ResponseListener;
 import com.kongzue.baseokhttp.util.Parameter;
+import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
@@ -39,7 +40,7 @@ public class HttpUtil {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("scene_id","article_feed");
             jsonObject.put("log_id","111");
-            jsonObject.put("distinct_id","test1");
+            jsonObject.put("distinct_id",SensorsDataAPI.sharedInstance().getAnonymousId());
             jsonObject.put("limit",count);
             jsonObject.put("exp_id","base");
             return HttpPOST.submitPostData(API.H_ARTICLE,jsonObject);
@@ -67,17 +68,29 @@ public class HttpUtil {
         return "";
     }
 
-    //{"scene_id":"article_relevant","log_id":"111","distinct_id":"test1","limit":"1","exp_id":"base","item_id":"6236675","item_type":"article"}
+    /**
+     * {
+     * "scene_id":"article_relevant",
+     * "log_id":"111",
+     * "distinct_id":"QQDFEFFEFDW",
+     * "limit":"3",
+     * "exp_id":"base",
+     * "item_id":"6550620",
+     * "item_type":"article"
+     * }
+     */
     public static String getH_Article_relevant( String start, String count,String itemId){
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("scene_id","article_relevant");
             jsonObject.put("log_id","111");
-            jsonObject.put("distinct_id","test1");
+            jsonObject.put("distinct_id",SensorsDataAPI.sharedInstance().getAnonymousId());
             jsonObject.put("limit",count);
             jsonObject.put("item_type","article");
             jsonObject.put("item_id",itemId);
             jsonObject.put("exp_id","base");
+
+            Log.d("qqqq:",jsonObject.toString());
             return HttpPOST.submitPostData(API.H_ARTICLE_RELEVENT,jsonObject);
         } catch (Exception e) {
             e.printStackTrace();
@@ -92,7 +105,7 @@ public class HttpUtil {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("scene_id","video_feed");
             jsonObject.put("log_id","111");
-            jsonObject.put("distinct_id","test1");
+            jsonObject.put("distinct_id",SensorsDataAPI.sharedInstance().getAnonymousId());
             jsonObject.put("limit",count);
             jsonObject.put("exp_id","base");
             return HttpPOST.submitPostData(API.H_VIDEO,jsonObject);
@@ -101,4 +114,36 @@ public class HttpUtil {
         }
         return "";
     }
+
+    /**
+     * {
+     *     "scene_id":"video_relevant",
+     *     "log_id":"111",
+     *     "distinct_id":"test1",
+     *     "limit":"3",
+     *     "exp_id":"base",
+     *     "item_id":"120586",
+     *     "item_type":"video"
+     * }
+     */
+
+    public static String getH_Video_relevant( String start, String count,String itemId){
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("scene_id","video_relevant");
+            jsonObject.put("log_id","111");
+            jsonObject.put("distinct_id",SensorsDataAPI.sharedInstance().getAnonymousId());
+            jsonObject.put("limit",count);
+            jsonObject.put("item_type","video");
+            jsonObject.put("item_id",itemId);
+            jsonObject.put("exp_id","base");
+
+            Log.d("qqqq:",jsonObject.toString());
+            return HttpPOST.submitPostData(API.H_ARTICLE_RELEVENT,jsonObject);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
 }

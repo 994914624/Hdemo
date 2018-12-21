@@ -49,7 +49,7 @@ public class NewsAdapter extends BaseMultiItemQuickAdapter<TouTiaoNewsEntity.T13
                 ((TextView)helper.getView(R.id.tv_item_1_news_subtitle)).setText(String.format("%s . %s跟帖",item.getSource(),item.getReplyCount()));
 
                 ImageView imageView = helper.getView(R.id.img_item_1_news);
-                Glide.with(App.mContext).load(item.getImgsrc()).into(imageView);
+                Glide.with(App.getApp()).load(item.getImgsrc()).into(imageView);
                 break;
 //            case NewsEntity.CLICK_ITEM_CHILD_VIEW:
 //                helper.addOnClickListener(R.id.img_item_2_num_reduce).addOnClickListener(R.id.img_item_2_num_add);

@@ -42,7 +42,7 @@ public class SARecommendAdapter   extends BaseMultiItemQuickAdapter<SARecommendE
                 ((TextView)helper.getView(R.id.tv_item_1_news_subtitle)).setText(String.format("%s",item.getSource()));
 
                 ImageView imageView = helper.getView(R.id.img_item_1_news);
-                Glide.with(App.mContext).load(item.getImg()).into(imageView);
+                Glide.with(App.getApp()).load(item.getImg()).into(imageView);
 
                 break;
             case SARecommendEntity.DataBean.CLICK_ITEM_VIEW_2:

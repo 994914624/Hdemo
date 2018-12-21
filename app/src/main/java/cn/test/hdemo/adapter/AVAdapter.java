@@ -40,7 +40,7 @@ public class AVAdapter extends BaseMultiItemQuickAdapter<AVEntity.SubjectsBean, 
                 ((TextView)helper.getView(R.id.tv_item_av_1_title)).setText(String.format("%s / %s",item.getTitle(),item.getOriginal_title()));
                 ((TextView)helper.getView(R.id.tv_item_av_1_sutitle)).setText(String.format("导演： %s",item.getDirectors().get(0).getName()));
                 ImageView imageView = helper.getView(R.id.img_item_av_1);
-                Glide.with(App.mContext).load(item.getImages().getSmall()).into(imageView);
+                Glide.with(App.getApp()).load(item.getImages().getSmall()).into(imageView);
 
                 break;
         }

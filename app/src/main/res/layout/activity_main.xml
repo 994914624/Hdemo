@@ -30,6 +30,11 @@
             app:imgMargin="@dimen/tab_img_margin"
             app:textColor="@color/tab_chat_text_selector"
             app:textSize="@dimen/tab_view_text_size"
+            app:rv_framerate="10"
+            app:rv_rippleDuration="100"
+            app:rv_zoom="true"
+            app:rv_zoomDuration="300"
+            app:rv_zoomScale="1.05"
             app:textShown="true"
             app:textString="神策推荐" />
 
@@ -64,6 +69,11 @@
             app:tabRippleEnable="true"
             app:textColor="@color/tab_app_text_selector"
             app:textSize="@dimen/tab_view_text_size"
+            app:rv_framerate="10"
+            app:rv_rippleDuration="100"
+            app:rv_zoom="true"
+            app:rv_zoomDuration="300"
+            app:rv_zoomScale="1.05"
             app:textString="图片" />
 
         <com.isanwenyu.tabview.TabView

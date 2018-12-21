@@ -6,6 +6,11 @@ import android.util.Log;
 
 import com.isanwenyu.tabview.TabGroup;
 import com.isanwenyu.tabview.TabView;
+import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
+import com.sensorsdata.analytics.android.sdk.SensorsDataIgnoreTrackAppViewScreen;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import cn.test.hdemo.activity.BaseActivity;
 import cn.test.hdemo.frg.AVFragment;
@@ -18,6 +23,7 @@ import cn.test.hdemo.frg.SAVideoFragment;
  * 主界面
  *
  */
+@SensorsDataIgnoreTrackAppViewScreen
 public class MainActivity extends BaseActivity {
     public static final int TAB_NEWS = 0x00;
     public static final int TAB_AV = 0x01;
@@ -27,7 +33,11 @@ public class MainActivity extends BaseActivity {
 
     ViewPager mViewPager;
     TabGroup mTabGroup;
-    TabView mTabNews;
+
+   TabView tab0;
+    TabView tab1;
+    TabView tab2;
+    TabView tab3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,39 +57,57 @@ public class MainActivity extends BaseActivity {
         setTitle("新闻");
         mViewPager = findViewById(R.id.vp_main);
         mTabGroup = findViewById(R.id.tg_tab);
-        mTabNews = findViewById(R.id.tab_news);
+        tab0 = findViewById(R.id.tab_news);
+        tab1 = findViewById(R.id.tb_av);
+        tab2 = findViewById(R.id.tb_img);
+        tab3 = findViewById(R.id.tb_user);
+
+        //忽略 mViewPager
+        SensorsDataAPI.sharedInstance().ignoreView(mViewPager);
 
         initViewPager();
         mTabGroup.setOnCheckedChangeListener(new TabGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(TabGroup group, int checkedId) {
+                 String tabName ="";
                 switch (checkedId) {
+
                     case R.id.tab_news:
                         setCurrentFragment(TAB_NEWS);
-                        setTitle("神策推荐");
-                        Log.d(TAG,"TAB_NEWS");
+
+                        tabName=tab0.getTextString();
+
                         break;
                     case R.id.tb_av:
                         setCurrentFragment(TAB_AV);
-                        setTitle("视频");
+                        tabName=tab1.getTextString();
                         Log.d(TAG,"TAB_AV");
                         break;
                     case R.id.tb_img:
                         setCurrentFragment(TAB_IMG);
-                        setTitle("图片");
+                        tabName=tab2.getTextString();
                         Log.d(TAG,"TAB_IMG");
                         break;
                     case R.id.tb_user:
                         setCurrentFragment(TAB_USER);
-                        setTitle("我");
+                        tabName=tab3.getTextString();
                         Log.d(TAG,"TAB_USER");
                         break;
+
+                }
+
+
+                setTitle(tabName);
+                try {
+                    SensorsDataAPI.sharedInstance().track("TabClick",new JSONObject().put("tab_name",tabName));
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
         });
 
 
-        mTabNews.setChecked(true);
+        tab0.setChecked(true);
 
     }
 
@@ -122,7 +150,7 @@ public class MainActivity extends BaseActivity {
      */
     public void setCurrentFragment(final int position) {
         Log.i(TAG, "position:" + position);
-        //不使用切换动画 避免与自定义动画冲突
         mViewPager.setCurrentItem(position, false);
+
     }
 }

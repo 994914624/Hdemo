@@ -14,13 +14,13 @@ public class API {
 
 
     // 新闻 list
-    public static final String H_ARTICLE = "http://40.125.169.204:9200/api/rec/article/feed";
+    public static final String H_ARTICLE = "http://42.159.80.211:8202/api/rec/article/feed";
     // detail
-    public static final String H_ARTICLE_DETAIL = "http://40.125.169.204:9200/api/rec/detail";
+    public static final String H_ARTICLE_DETAIL = "http://42.159.80.211:8202/api/rec/detail";
     //relevent
-    public static final String H_ARTICLE_RELEVENT = "http://40.125.169.204:9200/api/rec/article/relevant";
+    public static final String H_ARTICLE_RELEVENT = "http://42.159.80.211:8202/api/rec/article/relevant";
 
 
     //video
-    public static final String H_VIDEO = "http://40.125.169.204:9200/api/rec/video/feed";
+    public static final String H_VIDEO = "http://42.159.80.211:8202/api/rec/video/feed";
 }
