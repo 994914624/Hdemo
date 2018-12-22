@@ -49,6 +49,8 @@ public class SAVideoFragment extends BaseFragment {
     private SARecommendAdapter recommendAdapter;
     private int start = 0;
     private int count = 10;
+    private static final int up = 0;
+    private static final int down = 1;
     private Context context;
 
 
@@ -76,36 +78,41 @@ public class SAVideoFragment extends BaseFragment {
 
     }
 
+    RefreshLayout refreshLayout;
+
     private void initRefresh() {
 
-        RefreshLayout refreshLayout = (RefreshLayout) view.findViewById(R.id.sa_video_refreshLayout);
+        try {
+            refreshLayout = (RefreshLayout) view.findViewById(R.id.sa_video_refreshLayout);
+            refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+                @Override
+                public void onRefresh(RefreshLayout refreshlayout) {
 
-        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshlayout) {
-
-                refreshlayout.finishRefresh(1500);//刷新1s
-                //TODO 刷新数据
-                //start += 10;
-                Log.d(TAG, "onRefresh:" + start);
-                //TODO 刷新数据
-                //getData(String.valueOf(start),String.valueOf(count));
-            }
+                    refreshlayout.finishRefresh(1000);//刷新1s
+                    //TODO 刷新数据
+                    //start += 10;
+                    Log.d(TAG, "onRefresh:" + start);
+                    //TODO 刷新数据
+                    getData(String.valueOf(start), String.valueOf(count), up);
+                }
 
 
-        });
+            });
 
-        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(RefreshLayout refreshLayout) {
+            refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+                @Override
+                public void onLoadMore(RefreshLayout refreshLayout) {
 
-                //TODO 加载更多
-                Log.d(TAG, "onLoadMore:");
-                refreshLayout.finishLoadMore(1500);
-                start += 10;
-                getData(String.valueOf(start), String.valueOf(count));
-            }
-        });
+                    //TODO 加载更多
+                    Log.d(TAG, "onLoadMore:");
+                    refreshLayout.finishLoadMore(1500);
+                    start += 10;
+                    getData(String.valueOf(start), String.valueOf(count),down);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void initAdapter() {
@@ -115,11 +122,11 @@ public class SAVideoFragment extends BaseFragment {
         recommendAdapter.openLoadAnimation();
         mRecyclerView.setAdapter(recommendAdapter);
         // 获取默认数据
-        getData(String.valueOf(start), String.valueOf(count));
+        getData(String.valueOf(start), String.valueOf(count),down);
     }
 
-    private void getData(final String start, final String count) {
-
+    private void getData(final String start, final String count,final int upDown) {
+        try {
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<String> e) throws Exception {
@@ -146,7 +153,13 @@ public class SAVideoFragment extends BaseFragment {
                             final SARecommendEntity obj = jsonAdapter.fromJson(response);
                             // 更新数据
                             //recommendAdapter.getData().clear();
-                            recommendAdapter.addData(obj.getData());
+                            //
+                            // recommendAdapter.addData(obj.getData());
+                            if (upDown == up) {
+                                recommendAdapter.addData(0, obj.getData());
+                            } else {
+                                recommendAdapter.addData(obj.getData());
+                            }
                             recommendAdapter.notifyDataSetChanged();
 
                         } catch (Exception e) {
@@ -165,6 +178,9 @@ public class SAVideoFragment extends BaseFragment {
 
                     }
                 });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void initListener() {
@@ -181,7 +197,7 @@ public class SAVideoFragment extends BaseFragment {
                     intent.putExtra("itemId", String.format("%s", bean.getItem_id()));
                     intent.putExtra("img", String.format("%s", bean.getImg()));
                     intent.putExtra("source", String.format("%s", bean.getSource()));
-                    intent.putExtra("type","video");
+                    intent.putExtra("type", "video");
                     startActivity(intent);
                 } catch (Exception e) {
                     e.printStackTrace();

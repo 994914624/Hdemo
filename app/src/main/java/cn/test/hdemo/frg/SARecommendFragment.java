@@ -62,6 +62,8 @@ public class SARecommendFragment extends BaseFragment {
     private SARecommendAdapter recommendAdapter;
     private int start = 0;
     private int count = 10;
+    private static final int up = 0;
+    private static final int down = 1;
     private Context context;
 
     public SARecommendFragment() {
@@ -89,37 +91,44 @@ public class SARecommendFragment extends BaseFragment {
 
     }
 
+    RefreshLayout refreshLayout;
+
     private void initRefresh() {
+        try {
+            refreshLayout = (RefreshLayout) view.findViewById(R.id.sa_rec_refreshLayout);
 
-        RefreshLayout refreshLayout = (RefreshLayout) view.findViewById(R.id.sa_rec_refreshLayout);
+            refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+                @Override
+                public void onRefresh(RefreshLayout refreshlayout) {
 
-        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshlayout) {
-
-                refreshlayout.finishRefresh(1500);//刷新1s
-                //TODO 刷新数据
-                //start += 10;
-                Log.d(TAG, "onRefresh:" + start);
-                //TODO 刷新数据
-                //getData(String.valueOf(start),String.valueOf(count));
-                //avAdapter.setNewData();
-            }
+                    refreshlayout.finishRefresh(1000);//刷新1s
+                    //TODO 刷新数据
+                    //start += 10;
+                    Log.d(TAG, "onRefresh:" + start);
+                    //TODO 刷新数据
+                    //getData(String.valueOf(start),String.valueOf(count));
+                    //avAdapter.setNewData();
+                    // 获取默认数据
+                    getData(String.valueOf(start), String.valueOf(count), up);
+                }
 
 
-        });
+            });
 
-        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(RefreshLayout refreshLayout) {
+            refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+                @Override
+                public void onLoadMore(RefreshLayout refreshLayout) {
 
-                //TODO 加载更多
-                Log.d(TAG, "onLoadMore:");
-                refreshLayout.finishLoadMore(1500);
-                start += 10;
-                getData(String.valueOf(start), String.valueOf(count));
-            }
-        });
+                    //TODO 加载更多
+                    Log.d(TAG, "onLoadMore:");
+                    refreshLayout.finishLoadMore(1500);
+                    start += 10;
+                    getData(String.valueOf(start), String.valueOf(count), down);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void initAdapter() {
@@ -129,53 +138,62 @@ public class SARecommendFragment extends BaseFragment {
         recommendAdapter.openLoadAnimation();
         mRecyclerView.setAdapter(recommendAdapter);
         // 获取默认数据
-        getData(String.valueOf(start), String.valueOf(count));
+        getData(String.valueOf(start), String.valueOf(count), down);
     }
 
 
-    private void getData(final String start, final String count) {
-        // 默认前 10 条数据
-        Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(@NonNull ObservableEmitter<String> e) throws Exception {
+    private void getData(final String start, final String count, final int upDown) {
+        try {
+            // 默认前 10 条数据
+            Observable.create(new ObservableOnSubscribe<String>() {
+                @Override
+                public void subscribe(@NonNull ObservableEmitter<String> e) throws Exception {
 
-                // 获取 json
-                e.onNext(HttpUtil.getH_Article(start, count));
+                    // 获取 json
+                    e.onNext(HttpUtil.getH_Article(start, count));
 
-            }
-        }).subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<String>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+                }
+            }).subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<String>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
 
-                    }
-
-                    @Override
-                    public void onNext(@NonNull String response) {
-                        Log.d(TAG, "onNext = " + response);
-                        try {
-                            Moshi moshi = new Moshi.Builder().build();
-                            JsonAdapter<SARecommendEntity> jsonAdapter = moshi.adapter(SARecommendEntity.class);
-                            SARecommendEntity obj = jsonAdapter.fromJson(response);
-                            recommendAdapter.addData(obj.getData());
-                            recommendAdapter.notifyDataSetChanged();
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
 
-                    }
+                        @Override
+                        public void onNext(@NonNull String response) {
+                            Log.d(TAG, "onNext = " + response);
+                            try {
+                                Moshi moshi = new Moshi.Builder().build();
+                                JsonAdapter<SARecommendEntity> jsonAdapter = moshi.adapter(SARecommendEntity.class);
+                                SARecommendEntity obj = jsonAdapter.fromJson(response);
+                                if (upDown == up) {
+                                    recommendAdapter.addData(0, obj.getData());
+                                } else {
+                                    recommendAdapter.addData(obj.getData());
+                                }
 
-                    @Override
-                    public void onError(Throwable e) {
+                                recommendAdapter.notifyDataSetChanged();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
-                    }
+                        }
 
-                    @Override
-                    public void onComplete() {
+                        @Override
+                        public void onError(Throwable e) {
 
-                    }
-                });
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -185,7 +203,7 @@ public class SARecommendFragment extends BaseFragment {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Log.d(TAG, "onItemClick: ");
-               // Toast.makeText(context, "onItemClick" + position, Toast.LENGTH_SHORT).show();
+                // Toast.makeText(context, "onItemClick" + position, Toast.LENGTH_SHORT).show();
                 try {
                     SARecommendEntity.DataBean bean = (SARecommendEntity.DataBean) adapter.getItem(position);
                     Intent intent = new Intent(context, DetailActivity.class);
@@ -193,7 +211,7 @@ public class SARecommendFragment extends BaseFragment {
                     intent.putExtra("itemId", String.format("%s", bean.getItem_id()));
                     intent.putExtra("img", String.format("%s", bean.getImg()));
                     intent.putExtra("source", String.format("%s", bean.getSource()));
-                    intent.putExtra("type","article");
+                    intent.putExtra("type", "article");
                     startActivity(intent);
                 } catch (Exception e) {
                     e.printStackTrace();

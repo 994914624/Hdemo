@@ -107,6 +107,21 @@ public class DetailActivity extends BaseActivity {
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
 
                 Toast.makeText(App.getApp(),String.format("点击了神策推荐：%s",position),Toast.LENGTH_SHORT).show();
+
+                try {
+                    SARecommendEntity.DataBean bean = (SARecommendEntity.DataBean) adapter.getItem(position);
+                    Intent intent = new Intent(DetailActivity.this, DetailActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("title", String.format("%s", bean.getTitle()));
+                    intent.putExtra("itemId", String.format("%s", bean.getItem_id()));
+                    intent.putExtra("img", String.format("%s", bean.getImg()));
+                    intent.putExtra("source", String.format("%s", bean.getSource()));
+                    intent.putExtra("type","shence");
+                    startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
         });
     }
@@ -115,6 +130,10 @@ public class DetailActivity extends BaseActivity {
      * 数据
      */
     private void getData(final String start, final String count, final String type) {
+        if("shence".equals(type)){
+            setTitle("推荐详情");
+            return;
+        }
         // 默认前 3 条数据
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
