@@ -99,7 +99,10 @@ public class MainActivity extends BaseActivity {
 
                 setTitle(tabName);
                 try {
-                    SensorsDataAPI.sharedInstance().track("TabClick",new JSONObject().put("tab_name",tabName));
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("tab_name",tabName);
+                    jsonObject.put("$title",tabName);
+                    SensorsDataAPI.sharedInstance().track("TabClick",jsonObject);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

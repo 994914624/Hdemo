@@ -30,8 +30,8 @@ android {
             signingConfig signingConfigs.config
         }
         debug {
-            minifyEnabled true
-            zipAlignEnabled true
+            //minifyEnabled true
+            //zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
         }
@@ -78,7 +78,10 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.2.2'
 
     //添加 Sensors Analytics SDK 依赖
-    implementation 'com.sensorsdata.analytics.android:SensorsAnalyticsSDK:3.0.1'
+    implementation 'com.sensorsdata.analytics.android:SensorsAnalyticsSDK:3.0.4'
+
+    //流式布局
+    implementation 'liji.library.dev:multilinechooselib:2.0.3'
 }
 
 

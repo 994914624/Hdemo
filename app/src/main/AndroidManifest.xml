@@ -20,6 +20,16 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <!-- 在主 Activity 中配置 scheme-->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="debugmode"
+                    android:scheme="sa64b7c48f"/>
+            </intent-filter>
         </activity>
         <activity android:name=".activity.BaseActivity" />
         <activity android:name=".activity.DetailWebviewActivity" />
