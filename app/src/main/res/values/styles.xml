@@ -18,7 +18,7 @@
         <item name="colorAccent">@color/spinner_bg</item>
         <item name="android:actionBarStyle">@style/actionbar_def_style</item>
         <item name="android:textColorPrimary">@android:color/white</item>
-        <item name="android:windowIsTranslucent">true</item>
+        <!--<item name="android:windowIsTranslucent">true</item> 我擦 出现了动画-->
     </style>
     <style name="actionbar_def_style" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- 在样式里面直接替换掉actionbar的背景，避免在有的窗口进入慢时导致进入时显示系统默认的actionbar -->
@@ -33,7 +33,7 @@
         <item name="android:textColor">@color/hard_color</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">18sp</item>
-        <!--<item name="android:textStyle">bold</item>-->
+
         <item name="android:shadowColor">#44000000</item>
         <item name="android:shadowDx">1</item>
         <item name="android:shadowDy">1</item>
@@ -50,8 +50,6 @@
         <item name="android:textSize">10sp</item>
         <item name="android:textColor">#FFCCCCCC</item>
     </style>
-
-
 
 
 

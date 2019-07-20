@@ -146,4 +146,47 @@ public class HttpUtil {
         return "";
     }
 
+    /**
+     *{
+     *     "scene_id":"feed",
+     *     "distinct_id":"test",
+     *     "limit":"2"
+     * }
+     * ---------------------------------------------new----------------------------------------------------
+     */
+
+    public static String getNFeed( String start, String count){
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("scene_id","feed");
+            jsonObject.put("distinct_id",SensorsDataAPI.sharedInstance().getAnonymousId());
+            jsonObject.put("limit",count);
+
+            Log.d("qqqq:",jsonObject.toString());
+            return HttpPOST.submitPostData(API.N_FEED,jsonObject);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    /**
+     * {"scene_id":"reset_user","log_id":"1","distinct_id":"test","limit":"1","exp_id":"base"}
+     *
+     */
+    public static String resetUser(){
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("scene_id","reset_user");
+            jsonObject.put("distinct_id",SensorsDataAPI.sharedInstance().getAnonymousId());
+            jsonObject.put("log_id","1");
+            jsonObject.put("limit","1");
+            jsonObject.put("exp_id","base");
+            Log.d("qqqq:",jsonObject.toString());
+            return HttpPOST.submitPostData(API.N_RESET_USER,jsonObject);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
 }

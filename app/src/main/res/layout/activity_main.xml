@@ -23,6 +23,7 @@
             android:id="@+id/tab_news"
             style="@style/TabView"
             app:imgDrawable="@drawable/selector_home"
+            app:imgDimension="20dp"
             app:textColor="@color/tab_home_text_selector"
             app:textSize="@dimen/tab_view_text_size"
             app:rv_framerate="10"
@@ -40,6 +41,7 @@
             android:id="@+id/tb_av"
             style="@style/TabView"
             app:imgDrawable="@drawable/selector_classify"
+            app:imgDimension="20dp"
             app:rv_centered="false"
             app:rv_color="#E68836"
             app:rv_framerate="10"
@@ -55,6 +57,7 @@
             android:id="@+id/tb_img"
             style="@style/TabView"
             app:imgDrawable="@drawable/selector_friend"
+            app:imgDimension="20dp"
             app:tabRippleEnable="true"
             app:textColor="@color/tab_friend_text_selector"
             app:textSize="@dimen/tab_view_text_size"
@@ -64,12 +67,13 @@
             app:rv_zoom="true"
             app:rv_zoomDuration="300"
             app:rv_zoomScale="1.2"
-            app:textString="图片" />
+            app:textString="News" />
 
         <com.isanwenyu.tabview.TabView
             android:id="@+id/tb_user"
             style="@style/TabView"
             app:imgDrawable="@drawable/selector_my"
+            app:imgDimension="20dp"
             app:rv_centered="true"
             app:rv_color="#F96C53"
             app:rv_framerate="20"
@@ -79,6 +83,6 @@
             app:rv_zoomScale="1.2"
             app:textColor="@color/tab_my_text_selector"
             app:textSize="@dimen/tab_view_text_size"
-            app:textString="我" />
+            app:textString="user" />
     </com.isanwenyu.tabview.TabGroup>
 </LinearLayout>

@@ -48,8 +48,8 @@ public  class BaseFragment extends Fragment {
             case "NewsFragment":
                 fragment=new NewsFragment();
                 break;
-            case "AVFragment":
-               fragment= new AVFragment();
+            case "UserFragment":
+               fragment= new UserFragment();
                 break;
             case "SARecommendFragment":
                 fragment=new SARecommendFragment();

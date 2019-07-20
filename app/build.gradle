@@ -14,15 +14,21 @@ android {
         }
     }
 
+
+
     compileSdkVersion 28
     defaultConfig {
         applicationId "cn.test.hdemo"
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 13
-        versionName "1.3"
+        versionName "1.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+
+//        jackOptions {//After removing it I'm able to run the project.Java 8 language features will be natively supported by the Android build system.
+//            enabled true
+//        }
     }
 
     buildTypes {
@@ -78,7 +84,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.2.2'
 
     //添加 Sensors Analytics SDK 依赖
-    implementation 'com.sensorsdata.analytics.android:SensorsAnalyticsSDK:3.0.4'
+    implementation 'com.sensorsdata.analytics.android:SensorsAnalyticsSDK:3.1.4'
 
     //流式布局
     implementation 'liji.library.dev:multilinechooselib:2.0.3'

@@ -25,6 +25,7 @@ import java.util.List;
 import cn.test.hdemo.App;
 import cn.test.hdemo.R;
 import cn.test.hdemo.adapter.SARecommendAdapter;
+import cn.test.hdemo.entity.NFeedEntity;
 import cn.test.hdemo.entity.SARecommendEntity;
 import cn.test.hdemo.utils.HttpUtil;
 import io.reactivex.Observable;
@@ -55,7 +56,7 @@ public class DetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         initView();
-        initAdapter();
+        //initAdapter();
     }
 
     private void initView() {
@@ -89,7 +90,7 @@ public class DetailActivity extends BaseActivity {
             itemId = intent.getStringExtra("itemId");
             type = intent.getStringExtra("type");
             // 获取默认数据
-            getData(String.valueOf(start), String.valueOf(count), type);
+            //getData(String.valueOf(start), String.valueOf(count), type);
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -98,7 +99,7 @@ public class DetailActivity extends BaseActivity {
     }
 
     private void initAdapter() {
-        List<SARecommendEntity.DataBean> data = new ArrayList<>();
+        List<NFeedEntity.DataBean> data = new ArrayList<>();
         recommendAdapter = new SARecommendAdapter(data);
         recommendAdapter.openLoadAnimation();
         mRecyclerView.setAdapter(recommendAdapter);
@@ -109,14 +110,15 @@ public class DetailActivity extends BaseActivity {
                 Toast.makeText(App.getApp(),String.format("点击了神策推荐：%s",position),Toast.LENGTH_SHORT).show();
 
                 try {
-                    SARecommendEntity.DataBean bean = (SARecommendEntity.DataBean) adapter.getItem(position);
+                    NFeedEntity.DataBean bean = (NFeedEntity.DataBean) adapter.getItem(position);
                     Intent intent = new Intent(DetailActivity.this, DetailActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("title", String.format("%s", bean.getTitle()));
+                    if(bean == null)return;
+                    intent.putExtra("title", String.format("%s", bean.getName()));
                     intent.putExtra("itemId", String.format("%s", bean.getItem_id()));
                     intent.putExtra("img", String.format("%s", bean.getImg()));
-                    intent.putExtra("source", String.format("%s", bean.getSource()));
-                    intent.putExtra("type","shence");
+                    //intent.putExtra("source", String.format("%s", bean.getSource()));
+                    //intent.putExtra("type","shence");
                     startActivity(intent);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -144,7 +146,7 @@ public class DetailActivity extends BaseActivity {
                 if ("article".equals(type)) {
                     e.onNext(HttpUtil.getH_Article_relevant(start, count, itemId));
                 } else {
-                    e.onNext(HttpUtil.getH_Video_relevant(start, count, itemId));
+                    e.onNext(HttpUtil.getNFeed(start, count));
                 }
 
 
@@ -162,13 +164,14 @@ public class DetailActivity extends BaseActivity {
                         Log.d(TAG, "onNext = " + response);
                         try {
                             Moshi moshi = new Moshi.Builder().build();
-                            JsonAdapter<SARecommendEntity> jsonAdapter = moshi.adapter(SARecommendEntity.class);
+                            JsonAdapter<NFeedEntity> jsonAdapter = moshi.adapter(NFeedEntity.class);
 
 
-                            final SARecommendEntity obj = jsonAdapter.fromJson(response);
-                            final List<SARecommendEntity.DataBean> data = obj.getData();
+                            final NFeedEntity obj = jsonAdapter.fromJson(response);
+                            if(obj == null)return;
+                            final List<NFeedEntity.DataBean> data = obj.getData();
                             for (int i = 0; i < data.size(); i++) {
-                                data.get(i).setType(2);
+                                data.get(i).setType(0);
                             }
                             // 更新数据
                             recommendAdapter.getData().clear();

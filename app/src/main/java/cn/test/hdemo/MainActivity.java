@@ -13,7 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import cn.test.hdemo.activity.BaseActivity;
-import cn.test.hdemo.frg.AVFragment;
+import cn.test.hdemo.frg.UserFragment;
 import cn.test.hdemo.frg.SARecommendFragment;
 import cn.test.hdemo.frg.NewsFragment;
 import cn.test.hdemo.frg.SAVideoFragment;
@@ -33,8 +33,7 @@ public class MainActivity extends BaseActivity {
 
     ViewPager mViewPager;
     TabGroup mTabGroup;
-
-   TabView tab0;
+    TabView tab0;
     TabView tab1;
     TabView tab2;
     TabView tab3;
@@ -43,10 +42,7 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
         initView();
-
     }
 
     /**
@@ -54,7 +50,7 @@ public class MainActivity extends BaseActivity {
      */
     private void initView() {
         setBackBtnDismiss();
-        setTitle("新闻");
+        setTitle("");
         mViewPager = findViewById(R.id.vp_main);
         mTabGroup = findViewById(R.id.tg_tab);
         tab0 = findViewById(R.id.tab_news);
@@ -64,7 +60,6 @@ public class MainActivity extends BaseActivity {
 
         //忽略 mViewPager
         SensorsDataAPI.sharedInstance().ignoreView(mViewPager);
-
         initViewPager();
         mTabGroup.setOnCheckedChangeListener(new TabGroup.OnCheckedChangeListener() {
             @Override
@@ -118,14 +113,12 @@ public class MainActivity extends BaseActivity {
      * 初始化viewpager
      */
     private void initViewPager() {
-
-
         mViewPager.setOffscreenPageLimit(4);
         mViewPager.setAdapter(new MainFrgAdapter.Holder(getSupportFragmentManager())
                 .add(SARecommendFragment.newInstance("SARecommendFragment"))
                 .add(SAVideoFragment.newInstance("SAVideoFragment"))
                 .add(NewsFragment.newInstance("NewsFragment"))
-                .add(AVFragment.newInstance("AVFragment"))
+                .add(UserFragment.newInstance("UserFragment"))
                 .set());
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -148,8 +141,6 @@ public class MainActivity extends BaseActivity {
 
     /**
      * 改变fragment状态
-     *
-     *
      */
     public void setCurrentFragment(final int position) {
         Log.i(TAG, "position:" + position);

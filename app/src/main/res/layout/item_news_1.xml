@@ -19,7 +19,6 @@
         card_view:cardElevation="1dp"
         card_view:contentPadding="2dp"
         card_view:cardUseCompatPadding="true"
-
         >
         <LinearLayout
             android:orientation="horizontal"

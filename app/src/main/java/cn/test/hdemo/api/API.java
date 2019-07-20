@@ -23,4 +23,12 @@ public class API {
 
     //video
     public static final String H_VIDEO = "http://42.159.80.211:8202/api/rec/video/feed";
+
+
+    //------------------------- 2019-7-18 ----------new----------------------------------------------
+
+
+    public static final String N_FEED = "http://10.42.22.215:8201/api/rec/feed";
+    public static final String N_RESET_USER = "http://10.42.22.215:8201/api/rec/reset_user";
+    public static final String N_INFO = "http://10.42.22.215:8201/api/rec/info";
 }

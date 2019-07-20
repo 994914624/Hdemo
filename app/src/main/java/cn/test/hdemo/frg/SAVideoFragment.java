@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -20,14 +19,13 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.test.hdemo.R;
 import cn.test.hdemo.activity.DetailActivity;
 import cn.test.hdemo.adapter.SARecommendAdapter;
-import cn.test.hdemo.entity.SARecommendEntity;
+import cn.test.hdemo.entity.NFeedEntity;
 import cn.test.hdemo.utils.HttpUtil;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -63,12 +61,12 @@ public class SAVideoFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_user, container, false);
+        view = inflater.inflate(R.layout.fragment_vedio, container, false);
         context = view.getContext().getApplicationContext();
-        initView();
-        initRefresh();
-        initAdapter();
-        initListener();
+//        initView();
+//        initRefresh();
+//        initAdapter();
+//        initListener();
         return view;
     }
 
@@ -117,7 +115,7 @@ public class SAVideoFragment extends BaseFragment {
 
     private void initAdapter() {
 
-        List<SARecommendEntity.DataBean> data = new ArrayList<>();
+        List<NFeedEntity.DataBean> data = new ArrayList<>();
         recommendAdapter = new SARecommendAdapter(data);
         recommendAdapter.openLoadAnimation();
         mRecyclerView.setAdapter(recommendAdapter);
@@ -149,8 +147,8 @@ public class SAVideoFragment extends BaseFragment {
                         try {
 
                             Moshi moshi = new Moshi.Builder().build();
-                            JsonAdapter<SARecommendEntity> jsonAdapter = moshi.adapter(SARecommendEntity.class);
-                            final SARecommendEntity obj = jsonAdapter.fromJson(response);
+                            JsonAdapter<NFeedEntity> jsonAdapter = moshi.adapter(NFeedEntity.class);
+                            final NFeedEntity obj = jsonAdapter.fromJson(response);
                             // 更新数据
                             //recommendAdapter.getData().clear();
                             //
@@ -191,12 +189,11 @@ public class SAVideoFragment extends BaseFragment {
                 Log.d(TAG, "onItemClick: ");
                 //Toast.makeText(context, "onItemClick" + position, Toast.LENGTH_SHORT).show();
                 try {
-                    SARecommendEntity.DataBean bean = (SARecommendEntity.DataBean) adapter.getItem(position);
+                    NFeedEntity.DataBean bean = (NFeedEntity.DataBean) adapter.getItem(position);
                     Intent intent = new Intent(context, DetailActivity.class);
-                    intent.putExtra("title", String.format("%s", bean.getTitle()));
+                    intent.putExtra("title", String.format("%s", bean.getName()));
                     intent.putExtra("itemId", String.format("%s", bean.getItem_id()));
                     intent.putExtra("img", String.format("%s", bean.getImg()));
-                    intent.putExtra("source", String.format("%s", bean.getSource()));
                     intent.putExtra("type", "video");
                     startActivity(intent);
                 } catch (Exception e) {

@@ -83,7 +83,9 @@ public class NewsFragment extends BaseFragment {
                     TouTiaoNewsEntity.T1348647853363Bean bean = (TouTiaoNewsEntity.T1348647853363Bean) adapter.getItem(position);
                     Intent intent = new Intent(context,DetailWebviewActivity.class);
                     //intent.putExtra("title",String.format(""));
-                    intent.putExtra("H5_url",String.format("%s",bean.getUrl()));
+                    if (bean != null) {
+                        intent.putExtra("H5_url",String.format("%s",bean.getUrl()));
+                    }
                     startActivity(intent);
                 } catch (Exception e){
                     e.printStackTrace();
@@ -102,9 +104,6 @@ public class NewsFragment extends BaseFragment {
     }
 
     private void initAdapter() {
-
-
-
         List<TouTiaoNewsEntity.T1348647853363Bean> data = new ArrayList<>();
         newsAdapter = new NewsAdapter(data);
         newsAdapter.openLoadAnimation();
@@ -162,6 +161,7 @@ public class NewsFragment extends BaseFragment {
                         view.post(new Runnable() {
                             @Override
                             public void run() {
+                                if(obj ==null)return;
                                 List<TouTiaoNewsEntity.T1348647853363Bean> list = obj.getT1348647853363();
                                 if("0".equals(start)) {
                                     list.remove(Integer.parseInt(start));

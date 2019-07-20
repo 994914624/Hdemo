@@ -3,25 +3,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".frg.SAVideoFragment">
+    tools:context=".frg.UserFragment">
+
+    <TextView
+        android:id="@+id/tv_user_id"
+        android:layout_marginTop="50dp"
+        android:text="123"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:text="退出"
+        android:background="#FF6F6F"
+        android:layout_marginTop="100dp"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/btn_user_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <!-- TODO: Update blank fragment layout -->
 
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout
-        android:id="@+id/sa_video_refreshLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <com.scwang.smartrefresh.layout.header.ClassicsHeader
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/sa_video_recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:overScrollMode="never"
-            android:background="#fff" />
-        <com.scwang.smartrefresh.layout.footer.ClassicsFooter
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    <!--<com.scwang.smartrefresh.layout.SmartRefreshLayout-->
+        <!--android:id="@+id/user_refreshLayout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+        <!--<com.scwang.smartrefresh.layout.header.ClassicsHeader-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"/>-->
+        <!--<android.support.v7.widget.RecyclerView-->
+            <!--android:id="@+id/user_recyclerView"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:overScrollMode="never"-->
+            <!--android:background="#fff" />-->
+    <!--</com.scwang.smartrefresh.layout.SmartRefreshLayout>-->
+
 </FrameLayout>

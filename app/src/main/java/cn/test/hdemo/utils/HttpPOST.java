@@ -19,6 +19,7 @@ import java.net.URLEncoder;
 import java.io.ByteArrayOutputStream;
 
 public class HttpPOST {
+
     /*
      * Function  :   发送Post请求到服务器
      * Param     :   params请求体内容，encode编码格式
@@ -28,6 +29,38 @@ public class HttpPOST {
         try {
 
             byte[] data = params.toString().getBytes("UTF-8");
+            URL url = new URL(strUrlPath);
+
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.setConnectTimeout(8000);     //设置连接超时时间
+            httpURLConnection.setDoInput(true);                  //打开输入流，以便从服务器获取数据
+            httpURLConnection.setDoOutput(true);                 //打开输出流，以便向服务器提交数据
+            httpURLConnection.setRequestMethod("POST");     //设置以Post方式提交数据
+            httpURLConnection.setUseCaches(false);               //使用Post方式不能使用缓存
+            //设置请求体的类型是文本类型
+            httpURLConnection.setRequestProperty("Content-Type", "application/json");
+            //设置请求体的长度
+            httpURLConnection.setRequestProperty("Content-Length", String.valueOf(data.length));
+            //获得输出流，向服务器写入数据
+            OutputStream outputStream = httpURLConnection.getOutputStream();
+            outputStream.write(data);
+
+            int response = httpURLConnection.getResponseCode();            //获得服务器的响应码
+            if (response == HttpURLConnection.HTTP_OK) {
+                InputStream inptStream = httpURLConnection.getInputStream();
+                return dealResponseResult(inptStream);                     //处理服务器的响应结果
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "-1";
+    }
+
+    public static String submitPostData(String strUrlPath, String  params) {
+
+        try {
+
+            byte[] data = params.getBytes("UTF-8");
             URL url = new URL(strUrlPath);
 
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
