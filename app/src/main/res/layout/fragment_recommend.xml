@@ -20,8 +20,8 @@
             android:id="@+id/sa_rec_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="6dp"
-            android:paddingRight="6dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
             android:overScrollMode="never"
             />
         <com.scwang.smartrefresh.layout.footer.ClassicsFooter

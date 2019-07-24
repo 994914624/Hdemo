@@ -1,15 +1,12 @@
 package cn.test.hdemo.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,15 +15,14 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.test.hdemo.App;
 import cn.test.hdemo.R;
 import cn.test.hdemo.adapter.SARecommendAdapter;
-import cn.test.hdemo.entity.NFeedEntity;
-import cn.test.hdemo.entity.SARecommendEntity;
+
+import cn.test.hdemo.entity.NFeedEntity2;
 import cn.test.hdemo.utils.HttpUtil;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -99,7 +95,7 @@ public class DetailActivity extends BaseActivity {
     }
 
     private void initAdapter() {
-        List<NFeedEntity.DataBean> data = new ArrayList<>();
+        List<NFeedEntity2.DataBean> data = new ArrayList<>();
         recommendAdapter = new SARecommendAdapter(data);
         recommendAdapter.openLoadAnimation();
         mRecyclerView.setAdapter(recommendAdapter);
@@ -110,7 +106,7 @@ public class DetailActivity extends BaseActivity {
                 Toast.makeText(App.getApp(),String.format("点击了神策推荐：%s",position),Toast.LENGTH_SHORT).show();
 
                 try {
-                    NFeedEntity.DataBean bean = (NFeedEntity.DataBean) adapter.getItem(position);
+                    NFeedEntity2.DataBean bean = (NFeedEntity2.DataBean) adapter.getItem(position);
                     Intent intent = new Intent(DetailActivity.this, DetailActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     if(bean == null)return;
@@ -164,12 +160,12 @@ public class DetailActivity extends BaseActivity {
                         Log.d(TAG, "onNext = " + response);
                         try {
                             Moshi moshi = new Moshi.Builder().build();
-                            JsonAdapter<NFeedEntity> jsonAdapter = moshi.adapter(NFeedEntity.class);
+                            JsonAdapter<NFeedEntity2> jsonAdapter = moshi.adapter(NFeedEntity2.class);
 
 
-                            final NFeedEntity obj = jsonAdapter.fromJson(response);
+                            final NFeedEntity2 obj = jsonAdapter.fromJson(response);
                             if(obj == null)return;
-                            final List<NFeedEntity.DataBean> data = obj.getData();
+                            final List<NFeedEntity2.DataBean> data = obj.getData();
                             for (int i = 0; i < data.size(); i++) {
                                 data.get(i).setType(0);
                             }

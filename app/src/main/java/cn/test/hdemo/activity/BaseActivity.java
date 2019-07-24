@@ -11,12 +11,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+
+
 import cn.test.hdemo.R;
 
-public class BaseActivity extends AppCompatActivity {
+public class BaseActivity extends AppCompatActivity  {
 
-    public TextView title;
-    public ImageView back;
+    protected TextView title;
+    protected ImageView back;
     protected final String TAG = this.getClass().getSimpleName();
 
     public void setTitle(String msg) {
@@ -96,4 +98,12 @@ public class BaseActivity extends AppCompatActivity {
         rootLayout.addView(view, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         initToolbar();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+    }
+
+
 }

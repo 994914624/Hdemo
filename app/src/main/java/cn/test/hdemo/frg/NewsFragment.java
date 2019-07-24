@@ -3,7 +3,6 @@ package cn.test.hdemo.frg;
 
 import android.content.Context;
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -20,23 +18,14 @@ import com.kongzue.baseokhttp.listener.ResponseListener;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.squareup.moshi.JsonAdapter;
-import com.squareup.moshi.JsonReader;
 import com.squareup.moshi.Moshi;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.test.hdemo.MainActivity;
 import cn.test.hdemo.R;
 import cn.test.hdemo.activity.DetailWebviewActivity;
 import cn.test.hdemo.adapter.NewsAdapter;
-import cn.test.hdemo.api.API;
-import cn.test.hdemo.entity.AVEntity;
-import cn.test.hdemo.entity.NewsEntity;
 import cn.test.hdemo.entity.TouTiaoNewsEntity;
 import cn.test.hdemo.utils.HtmlParseUtil;
 import cn.test.hdemo.utils.HttpUtil;

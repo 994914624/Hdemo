@@ -7,16 +7,10 @@ import com.kongzue.baseokhttp.HttpRequest;
 import com.kongzue.baseokhttp.listener.ResponseListener;
 import com.kongzue.baseokhttp.util.Parameter;
 import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
-import com.squareup.moshi.JsonAdapter;
-import com.squareup.moshi.Moshi;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-
 import cn.test.hdemo.api.API;
-import cn.test.hdemo.entity.AVEntity;
 
 /**
  * Created by yzk on 2018/12/11
@@ -152,6 +146,7 @@ public class HttpUtil {
      *     "distinct_id":"test",
      *     "limit":"2"
      * }
+     *  feed 流
      * ---------------------------------------------new----------------------------------------------------
      */
 
@@ -162,7 +157,7 @@ public class HttpUtil {
             jsonObject.put("distinct_id",SensorsDataAPI.sharedInstance().getAnonymousId());
             jsonObject.put("limit",count);
 
-            Log.d("qqqq:",jsonObject.toString());
+            Log.i("qqqq:",jsonObject.toString());
             return HttpPOST.submitPostData(API.N_FEED,jsonObject);
         } catch (Exception e) {
             e.printStackTrace();
@@ -170,9 +165,10 @@ public class HttpUtil {
         return "";
     }
 
+
     /**
      * {"scene_id":"reset_user","log_id":"1","distinct_id":"test","limit":"1","exp_id":"base"}
-     *
+     * 重置用户
      */
     public static String resetUser(){
         try {

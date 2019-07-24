@@ -7,7 +7,18 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
  */
 
 public abstract class AbstractDataBean  {
+
     public static final int CLICK_ITEM_VIEW = 0;
     public static final int  CLICK_ITEM_VIEW_2 =2;
     public static final int  FEED_ITEM_1 =3;
+
+    private int tagColor;
+    public int getTagColor() {
+        return tagColor;
+    }
+
+    public void setTagColor(int tagColor) {
+        this.tagColor = tagColor;
+    }
+
 }

@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * Created by yzk on 2018/12/10
  */
@@ -220,7 +221,7 @@ public class App extends Application {
 
             SensorsDataAPI.sharedInstance().trackFragmentAppViewScreen();
 
-            //SensorsDataAPI.sharedInstance().enableLog(true);
+            SensorsDataAPI.sharedInstance().enableLog(true);
         } catch (Exception e) {
             e.printStackTrace();
         }

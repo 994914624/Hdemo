@@ -1,20 +1,17 @@
 package cn.test.hdemo.adapter;
 
 
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
 import java.util.List;
 
 import cn.test.hdemo.App;
 import cn.test.hdemo.R;
-import cn.test.hdemo.entity.NewsEntity;
 import cn.test.hdemo.entity.TouTiaoNewsEntity;
 
 /**

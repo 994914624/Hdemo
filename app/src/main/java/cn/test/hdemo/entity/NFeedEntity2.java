@@ -5,18 +5,18 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 import java.util.List;
 
 /**
- * Created by yzk on 2019/7/18
+ * Created by yzk on 2019/7/22
  */
 
-public class NFeedEntity {
+public class NFeedEntity2 {
 
 
     /**
      * code : 200
      * msg :
-     * data : [{"item_id":"25223","item_type":"shoes","retrieve_id":"hot","score":"-1.00000","name":"NIZZA HI RF 经典鞋","price":"729.0","origin_price":"729.0","brand":"adidas-originals","tags":["中性","ORIGINALS"],"img":"https://img.adidas.com.cn/resources/2019/5/10/1557467298590329_200X200.jpg"},{"item_id":"25701","item_type":"shoes","retrieve_id":"hot","score":"-1.00000","name":"PREDATOR 19.1 AG 足球鞋","price":"1599.0","origin_price":"1599.0","brand":"adidas-performance-athletics","tags":["男子","足球"],"img":"https://img.adidas.com.cn/resources/2019/6/11/15602349012008310_200X200.jpg"}]
+     * data : [{"item_id":18887,"item_type":"shoes","retrieve_id":"latest_tag","score":"-1.00000","name":"Harden Vol. 3 场上篮球鞋","price":1399,"origin_price":1399,"brand":"adidas-performance-athletics","labels":["harden","篮球"],"tags":["男子","篮球"],"img":"https://img.adidas.com.cn/resources/2018/12/20/15452753139923062_200X200.jpg"},{"item_id":10155,"item_type":"shoes","retrieve_id":"hot","score":"-1.00000","name":"ADILETTE 拖鞋","price":369,"origin_price":369,"brand":"adidas-originals","labels":["拖鞋"],"tags":["中性","ORIGINALS"],"img":"https://img.adidas.com.cn/resources/2018/5/7/15257012604461350_200X200.jpg"}]
      * exp_id :
-     * log_id : sc-ded6e8b2-c2c4-41d4-9520-ef46e1619c54
+     * log_id : sc-008afea2-a298-4337-874a-7a85eb51064f
      * strategy_id : baseline
      */
 
@@ -75,24 +75,24 @@ public class NFeedEntity {
         this.data = data;
     }
 
-    public static class DataBean  extends AbstractDataBean implements MultiItemEntity{
+    public static class DataBean extends AbstractDataBean implements MultiItemEntity {
         /**
-         * item_id : 25223
+         * item_id : 18887
          * item_type : shoes
-         * retrieve_id : hot
+         * retrieve_id : latest_tag
          * score : -1.00000
-         * name : NIZZA HI RF 经典鞋
-         * price : 729.0
-         * origin_price : 729.0
-         * brand : adidas-originals
-         * tags : ["中性","ORIGINALS"]
-         * img : https://img.adidas.com.cn/resources/2019/5/10/1557467298590329_200X200.jpg
+         * name : Harden Vol. 3 场上篮球鞋
+         * price : 1399
+         * origin_price : 1399
+         * brand : adidas-performance-athletics
+         * labels : ["harden","篮球"]
+         * tags : ["男子","篮球"]
+         * img : https://img.adidas.com.cn/resources/2018/12/20/15452753139923062_200X200.jpg
          */
-
         public void setType(int type) {
             this.type = type;
         }
-        public int type =3; // 默认3 item 的布局
+        int type =3; // 默认3 item 的布局
         public static final int CLICK_ITEM_VIEW = 0;
         public static final int  CLICK_ITEM_VIEW_2 =2;
         public static final int  FEED_ITEM_1 =3;
@@ -106,10 +106,11 @@ public class NFeedEntity {
         private String retrieve_id;
         private String score;
         private String name;
-        private String price;
-        private String origin_price;
+        private int price;
+        private int origin_price;
         private String brand;
         private String img;
+        private List<String> labels;
         private List<String> tags;
 
         public String getItem_id() {
@@ -152,19 +153,19 @@ public class NFeedEntity {
             this.name = name;
         }
 
-        public String getPrice() {
+        public int getPrice() {
             return price;
         }
 
-        public void setPrice(String price) {
+        public void setPrice(int price) {
             this.price = price;
         }
 
-        public String getOrigin_price() {
+        public int getOrigin_price() {
             return origin_price;
         }
 
-        public void setOrigin_price(String origin_price) {
+        public void setOrigin_price(int origin_price) {
             this.origin_price = origin_price;
         }
 
@@ -184,6 +185,14 @@ public class NFeedEntity {
             this.img = img;
         }
 
+        public List<String> getLabels() {
+            return labels;
+        }
+
+        public void setLabels(List<String> labels) {
+            this.labels = labels;
+        }
+
         public List<String> getTags() {
             return tags;
         }
@@ -191,7 +200,5 @@ public class NFeedEntity {
         public void setTags(List<String> tags) {
             this.tags = tags;
         }
-
-
     }
 }

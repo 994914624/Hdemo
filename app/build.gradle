@@ -19,9 +19,9 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "cn.test.hdemo"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 28
-        versionCode 13
+        versionCode 14
         versionName "1.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -74,7 +74,8 @@ dependencies {
     // json
     implementation 'com.squareup.moshi:moshi:1.8.0'
     // glide
-    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
     //jsoup 解析 html
     implementation 'org.jsoup:jsoup:1.9.2'
     // textview
@@ -84,7 +85,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.2.2'
 
     //添加 Sensors Analytics SDK 依赖
-    implementation 'com.sensorsdata.analytics.android:SensorsAnalyticsSDK:3.1.4'
+    implementation 'com.sensorsdata.analytics.android:SensorsAnalyticsSDK:3.2.1'
 
     //流式布局
     implementation 'liji.library.dev:multilinechooselib:2.0.3'

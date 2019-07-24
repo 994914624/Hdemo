@@ -17,8 +17,11 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +29,9 @@ import java.util.List;
 import cn.test.hdemo.R;
 import cn.test.hdemo.activity.DetailActivity;
 import cn.test.hdemo.adapter.SARecommendAdapter;
-import cn.test.hdemo.entity.NFeedEntity;
+import cn.test.hdemo.api.API;
+import cn.test.hdemo.entity.NFeedEntity2;
+import cn.test.hdemo.utils.HttpPOST;
 import cn.test.hdemo.utils.HttpUtil;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -45,12 +50,16 @@ public class SARecommendFragment extends BaseFragment {
     protected static String TAG = "SARecommendFragment";
     private View view;
     private RecyclerView mRecyclerView;
-    private SARecommendAdapter recommendAdapter;
+    private static SARecommendAdapter recommendAdapter;
     private int start = 0;
     private int count = 6;
     private static final int up = 0;
     private static final int down = 1;
     private Context context;
+
+    public static SARecommendAdapter getSARecommendAdapter(){
+        return recommendAdapter;
+    }
 
     public SARecommendFragment() {
         // Required empty public constructor
@@ -94,7 +103,7 @@ public class SARecommendFragment extends BaseFragment {
                 @Override
                 public void onRefresh(RefreshLayout refreshlayout) {
 
-                    refreshlayout.finishRefresh(500);//刷新1s
+                    refreshlayout.finishRefresh(100);//刷新 100ms
                     //TODO 刷新数据
                     //start += 10;
                     Log.d(TAG, "onRefresh:" + start);
@@ -114,9 +123,10 @@ public class SARecommendFragment extends BaseFragment {
 
                     //TODO 加载更多
                     Log.d(TAG, "onLoadMore:");
-                    refreshLayout.finishLoadMore(500);
+                    refreshLayout.finishLoadMore(50);
                     start += 10;
                     getData(String.valueOf(start), String.valueOf(count), down);
+
                 }
             });
         } catch (Exception e) {
@@ -126,7 +136,7 @@ public class SARecommendFragment extends BaseFragment {
 
     private void initAdapter() {
 
-        List<NFeedEntity.DataBean> data = new ArrayList<>();
+        List<NFeedEntity2.DataBean> data = new ArrayList<>();
         recommendAdapter = new SARecommendAdapter(data);
         recommendAdapter.openLoadAnimation();
         mRecyclerView.setAdapter(recommendAdapter);
@@ -159,8 +169,8 @@ public class SARecommendFragment extends BaseFragment {
                             Log.d(TAG, "onNext = " + response);
                             try {
                                 Moshi moshi = new Moshi.Builder().build();
-                                JsonAdapter<NFeedEntity> jsonAdapter = moshi.adapter(NFeedEntity.class);
-                                NFeedEntity obj = jsonAdapter.fromJson(response);
+                                JsonAdapter<NFeedEntity2> jsonAdapter = moshi.adapter(NFeedEntity2.class);
+                                NFeedEntity2 obj = jsonAdapter.fromJson(response);
                                 if(obj==null)return;
                                 if (upDown == up) {
                                     recommendAdapter.addData(0, obj.getData());
@@ -199,9 +209,11 @@ public class SARecommendFragment extends BaseFragment {
                 Log.d(TAG, "onItemClick: ");
                 // Toast.makeText(context, "onItemClick" + position, Toast.LENGTH_SHORT).show();
                 try {
-                    NFeedEntity.DataBean bean = (NFeedEntity.DataBean) adapter.getItem(position);
-                    Intent intent = new Intent(context, DetailActivity.class);
+                    NFeedEntity2.DataBean bean = (NFeedEntity2.DataBean) adapter.getItem(position);
                     if(bean==null)return;
+                    // 告诉服务端点击信息
+                    requestInfo(bean);
+                    Intent intent = new Intent(context, DetailActivity.class);
                     intent.putExtra("title", String.format("%s", bean.getName()));
                     intent.putExtra("itemId", String.format("%s", bean.getItem_id()));
                     intent.putExtra("img", String.format("%s", bean.getImg()));
@@ -214,6 +226,67 @@ public class SARecommendFragment extends BaseFragment {
 
             }
         });
+    }
+
+    /*
+     *  请求 info
+     *  {"scene_id":"info",
+     *  "log_id":"1",
+     *  "distinct_id":"test",
+     *  "limit":"1",
+     *  "exp_id":"base",
+     *  "item_id":"24840",
+     *  "item_type":"shoes"}
+     */
+    private void requestInfo(final NFeedEntity2.DataBean bean) {
+        try {
+            Observable.create(new ObservableOnSubscribe<String>() {
+                @Override
+                public void subscribe(@NonNull ObservableEmitter<String> e) throws Exception {
+                    // 获取 json
+                    try {
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("scene_id","info");
+                        jsonObject.put("distinct_id", SensorsDataAPI.sharedInstance().getAnonymousId());
+                        jsonObject.put("log_id","1");
+                        jsonObject.put("limit","1");
+                        jsonObject.put("exp_id","base");
+                        jsonObject.put("item_id",bean.getItem_id()+"");
+                        jsonObject.put("item_type",bean.getItem_type());
+
+                        Log.i("qqqq: requestInfo --> ",jsonObject.toString());
+                        e.onNext(HttpPOST.submitPostData(API.N_INFO,jsonObject));
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
+
+                }
+            }).subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<String>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onNext(@NonNull String response) {
+                            Log.i(TAG, "onNext requestInfo= " + response);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.i(TAG, "onError = " + e.getMessage());
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
