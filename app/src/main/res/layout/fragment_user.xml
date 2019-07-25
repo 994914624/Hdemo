@@ -8,13 +8,12 @@
     <TextView
         android:id="@+id/tv_user_id"
         android:layout_marginTop="50dp"
-        android:text="123"
+        android:text=""
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <Button
         android:text="退出"
-        android:background="#FF6F6F"
         android:layout_marginTop="100dp"
         android:layout_gravity="center_horizontal"
         android:id="@+id/btn_user_logout"

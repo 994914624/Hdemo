@@ -49,7 +49,7 @@ public class DetailWebviewActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        setAd();
+        //setAd();
     }
 
     /**
@@ -131,7 +131,7 @@ public class DetailWebviewActivity extends BaseActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
 
-                linearLayout.setVisibility(View.VISIBLE);
+                //linearLayout.setVisibility(View.VISIBLE);
                 super.onPageFinished(view, url);
 
             }

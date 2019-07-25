@@ -159,7 +159,6 @@ public class NewsFragment extends BaseFragment {
                                     newsAdapter.getData().clear();
                                     newsAdapter.addData(0,list);
                                 }
-
                                 newsAdapter.notifyDataSetChanged();
                             }
                         });

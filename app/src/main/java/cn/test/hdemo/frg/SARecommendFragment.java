@@ -17,30 +17,19 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
-import com.sensorsdata.analytics.android.sdk.SensorsDataAPI;
-import com.squareup.moshi.JsonAdapter;
-import com.squareup.moshi.Moshi;
-
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.test.hdemo.R;
 import cn.test.hdemo.activity.DetailActivity;
 import cn.test.hdemo.adapter.SARecommendAdapter;
-import cn.test.hdemo.api.API;
-import cn.test.hdemo.entity.NFeedEntity2;
-import cn.test.hdemo.utils.HttpPOST;
-import cn.test.hdemo.utils.HttpUtil;
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import cn.test.hdemo.custom.CustomObserver;
+import cn.test.hdemo.custom.IDataSuccess;
+import cn.test.hdemo.entity.AbstractDataBean;
+import cn.test.hdemo.entity.AbstractEntity;
+import cn.test.hdemo.utils.JsonUtil;
+import cn.test.hdemo.utils.RxUtil;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,8 +45,9 @@ public class SARecommendFragment extends BaseFragment {
     private static final int up = 0;
     private static final int down = 1;
     private Context context;
+    private IDataSuccess mDataSuccess;
 
-    public static SARecommendAdapter getSARecommendAdapter(){
+    public static SARecommendAdapter getSARecommendAdapter() {
         return recommendAdapter;
     }
 
@@ -65,6 +55,9 @@ public class SARecommendFragment extends BaseFragment {
         // Required empty public constructor
     }
 
+    public void setIDataSuccess(IDataSuccess iDataSuccess){
+        this.mDataSuccess = iDataSuccess;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,7 +81,6 @@ public class SARecommendFragment extends BaseFragment {
         manager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
         mRecyclerView.setItemAnimator(null);
         mRecyclerView.setLayoutManager(manager);
-
 //        mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
     }
@@ -98,7 +90,6 @@ public class SARecommendFragment extends BaseFragment {
     private void initRefresh() {
         try {
             refreshLayout = (RefreshLayout) view.findViewById(R.id.sa_rec_refreshLayout);
-
             refreshLayout.setOnRefreshListener(new OnRefreshListener() {
                 @Override
                 public void onRefresh(RefreshLayout refreshlayout) {
@@ -120,11 +111,10 @@ public class SARecommendFragment extends BaseFragment {
             refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
                 @Override
                 public void onLoadMore(RefreshLayout refreshLayout) {
-
                     //TODO 加载更多
                     Log.d(TAG, "onLoadMore:");
-                    refreshLayout.finishLoadMore(50);
-                    start += 10;
+                    refreshLayout.finishLoadMore(100);
+                    //start += 10;
                     getData(String.valueOf(start), String.valueOf(count), down);
 
                 }
@@ -135,8 +125,7 @@ public class SARecommendFragment extends BaseFragment {
     }
 
     private void initAdapter() {
-
-        List<NFeedEntity2.DataBean> data = new ArrayList<>();
+        List<AbstractDataBean> data = new ArrayList<>();
         recommendAdapter = new SARecommendAdapter(data);
         recommendAdapter.openLoadAnimation();
         mRecyclerView.setAdapter(recommendAdapter);
@@ -147,55 +136,27 @@ public class SARecommendFragment extends BaseFragment {
 
     private void getData(final String start, final String count, final int upDown) {
         try {
-            // 默认前 10 条数据
-            Observable.create(new ObservableOnSubscribe<String>() {
+            RxUtil.getFeedData(start, count, new CustomObserver(new IDataSuccess() {
                 @Override
-                public void subscribe(@NonNull ObservableEmitter<String> e) throws Exception {
-
-                    // 获取 json
-                    e.onNext(HttpUtil.getNFeed(start, count));
-
+                public void onDataSuccess(String response) {
+                    try {
+                        // 拿到实体数据
+                        AbstractEntity obj =JsonUtil.convertFromJson(response);
+                        if (obj == null) return;
+                        if (upDown == up) {
+                            recommendAdapter.addData(0, obj.getData());
+                        } else {
+                            recommendAdapter.addData(obj.getData());
+                        }
+                        recommendAdapter.notifyDataSetChanged();
+                        // 回调给 UserFragment
+                        mDataSuccess.onDataSuccess("");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(getContext(), "数据走丢了！", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }).subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Observer<String>() {
-                        @Override
-                        public void onSubscribe(Disposable d) {
-
-                        }
-
-                        @Override
-                        public void onNext(@NonNull String response) {
-                            Log.d(TAG, "onNext = " + response);
-                            try {
-                                Moshi moshi = new Moshi.Builder().build();
-                                JsonAdapter<NFeedEntity2> jsonAdapter = moshi.adapter(NFeedEntity2.class);
-                                NFeedEntity2 obj = jsonAdapter.fromJson(response);
-                                if(obj==null)return;
-                                if (upDown == up) {
-                                    recommendAdapter.addData(0, obj.getData());
-                                } else {
-                                    recommendAdapter.addData(obj.getData());
-                                }
-
-                                recommendAdapter.notifyDataSetChanged();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                Toast.makeText(getContext(),"数据走丢了！",Toast.LENGTH_SHORT).show();
-                            }
-
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            Log.d(TAG, "onError = " + e.getMessage());
-                        }
-
-                        @Override
-                        public void onComplete() {
-
-                        }
-                    });
+            }));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -209,10 +170,10 @@ public class SARecommendFragment extends BaseFragment {
                 Log.d(TAG, "onItemClick: ");
                 // Toast.makeText(context, "onItemClick" + position, Toast.LENGTH_SHORT).show();
                 try {
-                    NFeedEntity2.DataBean bean = (NFeedEntity2.DataBean) adapter.getItem(position);
-                    if(bean==null)return;
+                    AbstractDataBean bean = (AbstractDataBean) adapter.getItem(position);
+                    if (bean == null) return;
                     // 告诉服务端点击信息
-                    requestInfo(bean);
+                    RxUtil.requestInfo(bean);
                     Intent intent = new Intent(context, DetailActivity.class);
                     intent.putExtra("title", String.format("%s", bean.getName()));
                     intent.putExtra("itemId", String.format("%s", bean.getItem_id()));
@@ -226,68 +187,6 @@ public class SARecommendFragment extends BaseFragment {
 
             }
         });
-    }
-
-    /*
-     *  请求 info
-     *  {"scene_id":"info",
-     *  "log_id":"1",
-     *  "distinct_id":"test",
-     *  "limit":"1",
-     *  "exp_id":"base",
-     *  "item_id":"24840",
-     *  "item_type":"shoes"}
-     */
-    private void requestInfo(final NFeedEntity2.DataBean bean) {
-        try {
-            Observable.create(new ObservableOnSubscribe<String>() {
-                @Override
-                public void subscribe(@NonNull ObservableEmitter<String> e) throws Exception {
-                    // 获取 json
-                    try {
-                        JSONObject jsonObject = new JSONObject();
-                        jsonObject.put("scene_id","info");
-                        jsonObject.put("distinct_id", SensorsDataAPI.sharedInstance().getAnonymousId());
-                        jsonObject.put("log_id","1");
-                        jsonObject.put("limit","1");
-                        jsonObject.put("exp_id","base");
-                        jsonObject.put("item_id",bean.getItem_id()+"");
-                        jsonObject.put("item_type",bean.getItem_type());
-
-                        Log.i("qqqq: requestInfo --> ",jsonObject.toString());
-                        e.onNext(HttpPOST.submitPostData(API.N_INFO,jsonObject));
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
-                    }
-
-                }
-            }).subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Observer<String>() {
-                        @Override
-                        public void onSubscribe(Disposable d) {
-
-                        }
-
-                        @Override
-                        public void onNext(@NonNull String response) {
-                            Log.i(TAG, "onNext requestInfo= " + response);
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            Log.i(TAG, "onError = " + e.getMessage());
-                        }
-
-                        @Override
-                        public void onComplete() {
-
-                        }
-                    });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
 }

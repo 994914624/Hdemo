@@ -8,7 +8,7 @@ import java.util.List;
  * Created by yzk on 2019/7/22
  */
 
-public class NFeedEntity2 {
+public class NFeedEntity2 extends AbstractEntity{
 
 
     /**
@@ -75,7 +75,7 @@ public class NFeedEntity2 {
         this.data = data;
     }
 
-    public static class DataBean extends AbstractDataBean implements MultiItemEntity {
+    public static class DataBean extends AbstractDataBean  {
         /**
          * item_id : 18887
          * item_type : shoes
@@ -89,17 +89,15 @@ public class NFeedEntity2 {
          * tags : ["男子","篮球"]
          * img : https://img.adidas.com.cn/resources/2018/12/20/15452753139923062_200X200.jpg
          */
-        public void setType(int type) {
-            this.type = type;
-        }
-        int type =3; // 默认3 item 的布局
-        public static final int CLICK_ITEM_VIEW = 0;
-        public static final int  CLICK_ITEM_VIEW_2 =2;
-        public static final int  FEED_ITEM_1 =3;
-        @Override
-        public int getItemType() {
-            return type;
-        }
+//        public void setType(int type) {
+//            this.type = type;
+//        }
+//        int type =1; // 默认1 item 的布局
+//        public static final int  FEED_ITEM_1 =1;
+//        @Override
+//        public int getItemType() {
+//            return type;
+//        }
 
         private String item_id;
         private String item_type;

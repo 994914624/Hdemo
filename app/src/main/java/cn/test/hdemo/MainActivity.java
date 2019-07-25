@@ -114,11 +114,15 @@ public class MainActivity extends BaseActivity {
      */
     private void initViewPager() {
         mViewPager.setOffscreenPageLimit(4);
+
+        SARecommendFragment saRecommendFragment = (SARecommendFragment) SARecommendFragment.newInstance("SARecommendFragment");
+        UserFragment userFragment = (UserFragment) UserFragment.newInstance("UserFragment");
+        saRecommendFragment.setIDataSuccess(userFragment);
         mViewPager.setAdapter(new MainFrgAdapter.Holder(getSupportFragmentManager())
-                .add(SARecommendFragment.newInstance("SARecommendFragment"))
+                .add(saRecommendFragment)
                 .add(SAVideoFragment.newInstance("SAVideoFragment"))
                 .add(NewsFragment.newInstance("NewsFragment"))
-                .add(UserFragment.newInstance("UserFragment"))
+                .add(userFragment)
                 .set());
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
